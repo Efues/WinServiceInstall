@@ -10,6 +10,7 @@ namespace ServiceCore
   public class EntryPoint
   {
     private long loopCnt = 0;
+    object syncObject = new object();
 
     public void Init()
     {
@@ -25,10 +26,18 @@ namespace ServiceCore
 
     public void Execute()
     {
-      if (loopCnt >= long.MaxValue) loopCnt = 0;
-      Efues.Utility.Log.Write($"StartLoop:{loopCnt++}");
+      lock (syncObject)
+      {
+        if (loopCnt >= long.MaxValue) loopCnt = 0;
+        var currentLoop = loopCnt++;
 
-      // ここにループの処理を入れる
+        Efues.Utility.Log.Write($"StartLoop:{currentLoop}");
+
+        // ここにループの処理を入れる
+
+
+        Efues.Utility.Log.Write($"EndLoop:{currentLoop}");
+      }
     }
   }
 }
