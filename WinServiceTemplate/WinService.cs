@@ -12,7 +12,7 @@ namespace WinServiceTemplate
   public partial class WinService : ServiceBase
   {
     private readonly Setting setting = new Setting();
-
+    private readonly EntryPoint entryPoint = new EntryPoint();
     public WinService()
     {
       InitializeComponent();
@@ -63,6 +63,7 @@ namespace WinServiceTemplate
       SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
       Log.Write("Service Started");
+      entryPoint.Init();
     }
 
     protected override void OnStop()
@@ -78,11 +79,12 @@ namespace WinServiceTemplate
       SetServiceStatus(this.ServiceHandle, ref serviceStatus);
 
       Log.Write("Service Stopped");
+      entryPoint.Finish();
     }
 
     private void OnTimer(object sender, ElapsedEventArgs e)
     {
-      EntryPoint.Execute();
+      entryPoint.Execute();
     }
   }
 }

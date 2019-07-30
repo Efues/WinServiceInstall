@@ -16,6 +16,7 @@ namespace WinServiceInstall
   public partial class MainForm : Form
   {
     private readonly Setting setting = new Setting();
+    private readonly EntryPoint entryPoint = new EntryPoint();
 
     public MainForm()
     {
@@ -41,7 +42,9 @@ namespace WinServiceInstall
     {
       try
       {
-        EntryPoint.Execute();
+        entryPoint.Init();
+        entryPoint.Execute();
+        entryPoint.Finish();
       }
       catch (Exception exp)
       {
@@ -59,9 +62,11 @@ namespace WinServiceInstall
         {
           timer.Stop();
           buttonExecuteLoop.Text = "Execute Loop";
+          entryPoint.Finish();
         }
         else
         {
+          entryPoint.Init();
           timer.Interval = setting.LoopInterval;
           timer.Start();
           buttonExecuteLoop.Text = "Stop Loop";
@@ -77,7 +82,6 @@ namespace WinServiceInstall
     private void timer_Tick(object sender, EventArgs e)
     {
       EntryPoint.Execute();
-
       textBoxLoopCnt.Text = (loopCnt++).ToString();
     }
 
