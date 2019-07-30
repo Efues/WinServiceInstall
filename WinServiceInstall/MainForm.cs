@@ -81,7 +81,7 @@ namespace WinServiceInstall
 
     private void timer_Tick(object sender, EventArgs e)
     {
-      EntryPoint.Execute();
+      entryPoint.Execute();
       textBoxLoopCnt.Text = (loopCnt++).ToString();
     }
 
